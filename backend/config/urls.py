@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.utils import extend_schema
 
 
 urlpatterns = [
@@ -12,12 +13,17 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('api/', include('chat.urls'))
+    path('api/chat/', include('chat.urls'))
 ]
 
 
+@extend_schema(
+    tags=['Users'],
+    summary='Get user token',
+    description='Endpoint to get user token.'
+)
 class CustomAuthToken(ObtainAuthToken):
-    parser_classes = [JSONParser, ]
+    parser_classes = [JSONParser]
 
     def post(self, request, *args, **kwargs):
         response = super(CustomAuthToken, self).post(request, *args, **kwargs)
@@ -30,5 +36,5 @@ class CustomAuthToken(ObtainAuthToken):
 
 
 urlpatterns += [
-    path('api/token/', CustomAuthToken.as_view(), name='api_token_auth'),
+    path('api/users/token/', CustomAuthToken.as_view(), name='api_token_auth'),
 ]
