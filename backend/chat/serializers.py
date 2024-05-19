@@ -8,7 +8,7 @@ class ThreadSerializer(serializers.ModelSerializer):
         if len(values) != 2:
             raise serializers.ValidationError(f'A thread must have only 2 participants.')
         if len(values) != len(set(values)):
-            raise serializers.ValidationError(f'The participant cannot write to himself.')
+            raise serializers.ValidationError(f'The participant duplicated.')
         return values
 
     class Meta:

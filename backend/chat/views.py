@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -18,7 +18,7 @@ from chat.serializers import ThreadSerializer, MessageSerializer, MessageReadSer
 )
 class ThreadCreateView(CreateAPIView):
     serializer_class = ThreadSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
     queryset = Thread.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -34,6 +34,8 @@ class ThreadCreateView(CreateAPIView):
             return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
         existing_thread = Thread.objects.filter(participants__in=participants)
+        for p in participants:
+            existing_thread = existing_thread.filter(participants=p)
 
         if existing_thread.exists():
             thread = existing_thread.first()
@@ -55,7 +57,7 @@ class ThreadCreateView(CreateAPIView):
 )
 class ThreadDestroyView(DestroyAPIView):
     serializer_class = ThreadSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Thread.objects.filter(participants=self.request.user)  # User can only delete his own threads
@@ -69,7 +71,7 @@ class ThreadDestroyView(DestroyAPIView):
 )
 class ThreadListView(ListAPIView):
     serializer_class = ThreadSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
     pagination_class = DefaultSetPagination
 
     def get_queryset(self):
@@ -83,7 +85,7 @@ class ThreadListView(ListAPIView):
 )
 class MessageCreateView(CreateAPIView):
     serializer_class = MessageSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
     queryset = Message.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -109,7 +111,7 @@ class MessageCreateView(CreateAPIView):
 )
 class MessageListView(ListAPIView):
     serializer_class = MessageSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
     pagination_class = DefaultSetPagination
 
     def get_queryset(self):
@@ -130,7 +132,7 @@ class MessageListView(ListAPIView):
 )
 class MessageReadChangeView(UpdateAPIView):
     serializer_class = MessageReadSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['patch']
     queryset = Message.objects.all()
 

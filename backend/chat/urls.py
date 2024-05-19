@@ -7,7 +7,7 @@ from chat.views import (
 urlpatterns = [
     # threads
     path('threads/create/', ThreadCreateView.as_view(), name='thread_create'),
-    path('threads/<int:pk>/delete/', ThreadDestroyView.as_view(), name='thread_destroy'),
+    path('threads/<int:pk>/delete/', ThreadDestroyView.as_view(), name='thread_delete'),
     path('threads/list/', ThreadListView.as_view(), name='thread_list'),
     # messages
     path('messages/create/', MessageCreateView.as_view(), name='message_create'),
