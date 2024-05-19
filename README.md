@@ -33,7 +33,7 @@ This chat application provides a way for users to communicate via threads, where
     ```
 3. **Install dependencies:**
     ```bash
-   pip install -r requirements.txt
+   pip install -r backend/requirements.txt
    ```
 4. **Run the development server:**
    ```bash
@@ -52,5 +52,6 @@ This chat application provides a way for users to communicate via threads, where
 
 ### Running Tests
 ```bash
-python backend/manage.py test
+cd backend
+python manage.py test
 ```
