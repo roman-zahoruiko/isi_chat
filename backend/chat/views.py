@@ -64,7 +64,6 @@ class ThreadDestroyView(DestroyAPIView):
 
 
 @extend_schema(
-    # operation_id='thread_list',
     tags=['Chat, Threads'],
     summary='Get user threads',
     description='Endpoint to get users threads.'
